@@ -1,1 +1,2 @@
 include ':app', ':zxing_core', ':zxing_android_core'
+include ':QRApp'
