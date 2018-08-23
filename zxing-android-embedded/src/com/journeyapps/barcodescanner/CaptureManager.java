@@ -51,6 +51,10 @@ import java.util.Map;
  * - Displaying camera errors
  */
 public class CaptureManager {
+    public interface IResultCallback {
+        void onResult(BarcodeResult result);
+    }
+
     private static final String TAG = CaptureManager.class.getSimpleName();
 
     private static int cameraPermissionReqCode = 250;
@@ -69,6 +73,8 @@ public class CaptureManager {
     private Handler handler;
 
     private boolean finishWhenClosed = false;
+
+    private IResultCallback resultCallback;
 
     private BarcodeCallback callback = new BarcodeCallback() {
         @Override
@@ -221,7 +227,8 @@ public class CaptureManager {
     /**
      * Start decoding.
      */
-    public void decode() {
+    public void decode(IResultCallback resultCallback) {
+        this.resultCallback = resultCallback;
         barcodeView.decodeSingle(callback);
     }
 
@@ -392,9 +399,13 @@ public class CaptureManager {
     }
 
     protected void returnResult(BarcodeResult rawResult) {
-        Intent intent = resultIntent(rawResult, getBarcodeImagePath(rawResult));
-        activity.setResult(Activity.RESULT_OK, intent);
-        closeAndFinish();
+        if(null != resultCallback) {
+            resultCallback.onResult(rawResult);
+        } else {
+            Intent intent = resultIntent(rawResult, getBarcodeImagePath(rawResult));
+            activity.setResult(Activity.RESULT_OK, intent);
+            closeAndFinish();
+        }
     }
 
     protected void displayFrameworkBugMessageAndExit() {

@@ -22,7 +22,7 @@ public class CaptureActivity extends Activity {
 
         capture = new CaptureManager(this, barcodeScannerView);
         capture.initializeFromIntent(getIntent(), savedInstanceState);
-        capture.decode();
+        capture.decode(null);
     }
 
     /**

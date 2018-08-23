@@ -1,18 +1,14 @@
 package com.yy.adam.qrcode;
 
-import android.content.Intent;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
+import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
 
+import com.journeyapps.barcodescanner.BarcodeResult;
 import com.journeyapps.barcodescanner.CaptureManager;
 import com.journeyapps.barcodescanner.DecoratedBarcodeView;
 
 public class MainActivity extends AppCompatActivity {
-
-    private static final String TAG = MainActivity.class.getSimpleName();
 
     private CaptureManager mCaptureManager;
     private DecoratedBarcodeView mDecoratedBarcodeView;
@@ -41,12 +37,17 @@ public class MainActivity extends AppCompatActivity {
 
         mCaptureManager = new CaptureManager(this, mDecoratedBarcodeView);
         mCaptureManager.initializeFromIntent(getIntent(), savedInstanceState);
-        mCaptureManager.decode();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        mCaptureManager.decode(new CaptureManager.IResultCallback() {
+            @Override
+            public void onResult(BarcodeResult result) {
+                ResultUtil.handleResult(result);
+            }
+        });
         mCaptureManager.onResume();
     }
 
@@ -71,11 +72,5 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         return mDecoratedBarcodeView.onKeyDown(keyCode, event) || super.onKeyDown(keyCode, event);
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        Log.e(TAG, data.toString());
     }
 }
