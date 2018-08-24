@@ -1,4 +1,6 @@
 <resources>
     <string name="app_name">QRCode</string>
     <string name="copy">Copy</string>
+    <string name="msg_intent_failed">Sorry, the requested application could not be launched. The barcode contents may be invalid.</string>
+    <string name="button_ok">OK</string>
 </resources>

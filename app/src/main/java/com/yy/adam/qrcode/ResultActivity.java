@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.google.zxing.client.result.ParsedResult;
+
 public class ResultActivity extends AppCompatActivity {
 
     TextView mType;
@@ -34,11 +36,33 @@ public class ResultActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        updateDisplay();
+        handleResult();
     }
 
-    private void updateDisplay() {
-        mType.setText(ResultUtil.s_ParsedResult.getType().name());
-        mDisplayResult.setText(ResultUtil.s_ParsedResult.getDisplayResult());
+    private void handleResult() {
+        ParsedResult parsedResult = ResultUtil.s_ParsedResult;
+        if(null != parsedResult) {
+            switch (parsedResult.getType()) {
+                case URI:
+                    ResultHandler.openBrowser(this, parsedResult.getDisplayResult());
+                    break;
+                case TEL:
+                    break;
+                case ADDRESSBOOK:
+                case GEO:
+                case EMAIL_ADDRESS:
+                case PRODUCT:
+                case TEXT:
+                case SMS:
+                case CALENDAR:
+                case WIFI:
+                case ISBN:
+                case VIN:
+                default:
+                    mType.setText("Type : " + parsedResult.getType().name());
+                    mDisplayResult.setText(ResultUtil.s_ParsedResult.getDisplayResult());
+                    break;
+            }
+        }
     }
 }
