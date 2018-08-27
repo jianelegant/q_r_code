@@ -1,6 +1,8 @@
 package com.yy.adam.qrcode;
 
 import android.Manifest;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -11,7 +13,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
-import android.widget.Button;
+import android.view.View;
 import android.widget.TextView;
 
 import com.google.zxing.client.result.AddressBookParsedResult;
@@ -28,7 +30,7 @@ public class ResultActivity extends AppCompatActivity {
 
     TextView mType;
     TextView mDisplayResult;
-    Button mCopy;
+    TextView mCopy;
 
     public static void callStart() {
         Intent intent = new Intent(MainApp.s_GlobalCtx, ResultActivity.class);
@@ -47,6 +49,19 @@ public class ResultActivity extends AppCompatActivity {
         mType = findViewById(R.id.id_type);
         mDisplayResult = findViewById(R.id.id_display_result);
         mCopy = findViewById(R.id.id_copy);
+        mCopy.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                copyToFlipboard();
+            }
+        });
+    }
+
+    private void copyToFlipboard() {
+        ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+        ClipData clip = ClipData.newPlainText(getString(R.string.app_name), ResultUtil.s_ParsedResult.getDisplayResult());
+        clipboard.setPrimaryClip(clip);
+        Util.toast("Copy to Flipboard succeed");
     }
 
     @Override
@@ -56,6 +71,7 @@ public class ResultActivity extends AppCompatActivity {
     }
 
     private void handleResult() {
+        mCopy.setVisibility(View.GONE);
         ParsedResult parsedResult = ResultUtil.s_ParsedResult;
         if(null != parsedResult) {
             switch (parsedResult.getType()) {
@@ -128,6 +144,7 @@ public class ResultActivity extends AppCompatActivity {
                 case ISBN:
                 case VIN:
                 default:
+                    mCopy.setVisibility(View.VISIBLE);
                     mType.setText("Type : " + parsedResult.getType().name());
                     mDisplayResult.setText(ResultUtil.s_ParsedResult.getDisplayResult());
                     break;
@@ -141,7 +158,6 @@ public class ResultActivity extends AppCompatActivity {
         if(PERMISSION_REQUEST_CODE == requestCode) {
             if(null != permissions && permissions.length > 0) {
                 if(PackageManager.PERMISSION_GRANTED == grantResults[0]) {
-//                    handleResult();
                 }
             }
         }

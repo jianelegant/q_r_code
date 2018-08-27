@@ -22,13 +22,17 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
-    <android.support.v7.widget.AppCompatButton
+    <android.support.v7.widget.AppCompatTextView
         android:id="@+id/id_copy"
         android:layout_below="@id/id_display_result"
         android:layout_marginTop="9dp"
         android:layout_centerHorizontal="true"
         android:text="@string/copy"
+        android:textColor="@android:color/holo_blue_dark"
+        android:background="?android:attr/selectableItemBackground"
         android:typeface="monospace"
+        android:padding="11dp"
+        android:visibility="gone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 </RelativeLayout>
