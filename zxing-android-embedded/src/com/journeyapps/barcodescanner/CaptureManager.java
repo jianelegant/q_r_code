@@ -275,10 +275,28 @@ public class CaptureManager {
                 // permission was granted
                 barcodeView.resume();
             } else {
-                // TODO: display better error message.
-                displayFrameworkBugMessageAndExit();
+                displayPermissionDenyMsg();
             }
         }
+    }
+
+    private void displayPermissionDenyMsg() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+        builder.setTitle(activity.getString(R.string.zxing_app_name));
+        builder.setMessage(activity.getString(R.string.zxing_msg_camera_permission_deny));
+        builder.setPositiveButton(R.string.zxing_button_ok, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                finish();
+            }
+        });
+        builder.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialog) {
+                finish();
+            }
+        });
+        builder.show();
     }
 
     /**

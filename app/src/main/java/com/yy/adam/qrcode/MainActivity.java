@@ -1,6 +1,7 @@
 package com.yy.adam.qrcode;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
 import android.view.View;
@@ -95,6 +96,11 @@ public class MainActivity extends AppCompatActivity {
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         mCaptureManager.onSaveInstanceState(outState);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        mCaptureManager.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
     @Override
