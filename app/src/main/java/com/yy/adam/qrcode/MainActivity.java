@@ -6,6 +6,10 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.InterstitialAd;
 import com.journeyapps.barcodescanner.BarcodeResult;
 import com.journeyapps.barcodescanner.CaptureManager;
 import com.journeyapps.barcodescanner.DecoratedBarcodeView;
@@ -17,11 +21,16 @@ public class MainActivity extends AppCompatActivity {
 
     ImageView mFlashBtn;
 
+    private InterstitialAd mInterstitialAd;
+    int failRetryTimes = 0;
+    boolean b_IsOnResult = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        loadAd();
         initViews(savedInstanceState);
     }
 
@@ -60,10 +69,14 @@ public class MainActivity extends AppCompatActivity {
         mCaptureManager.decode(new CaptureManager.IResultCallback() {
             @Override
             public void onResult(BarcodeResult result) {
+                b_IsOnResult = true;
                 ResultUtil.handleResult(result);
             }
         });
         mCaptureManager.onResume();
+        if(b_IsOnResult) {
+            showInterstitialAd();
+        }
     }
 
     @Override
@@ -87,5 +100,33 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         return mDecoratedBarcodeView.onKeyDown(keyCode, event) || super.onKeyDown(keyCode, event);
+    }
+
+    private void loadAd() {
+        AdView adView = findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        adView.loadAd(adRequest);
+
+        failRetryTimes = 0;
+        mInterstitialAd = new InterstitialAd(this);
+        mInterstitialAd.setAdUnitId(getString(R.string.interstitial_ad_id));
+        mInterstitialAd.loadAd(new AdRequest.Builder().build());
+        mInterstitialAd.setAdListener(new AdListener(){
+            @Override
+            public void onAdFailedToLoad(int i) {
+                if(!MainActivity.this.isFinishing() && failRetryTimes < 3) {
+                    if(null != mInterstitialAd) {
+                        mInterstitialAd.loadAd(new AdRequest.Builder().build());
+                        failRetryTimes++;
+                    }
+                }
+            }
+        });
+    }
+
+    private void showInterstitialAd() {
+        if(null != mInterstitialAd && mInterstitialAd.isLoaded()) {
+            mInterstitialAd.show();
+        }
     }
 }
