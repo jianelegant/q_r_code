@@ -264,6 +264,10 @@ public class CameraPreview extends ViewGroup {
         setupSurfaceView();
     }
 
+    public boolean isTorchOn() {
+        return torchOn;
+    }
+
     /**
      * Initialize from XML attributes.
      *

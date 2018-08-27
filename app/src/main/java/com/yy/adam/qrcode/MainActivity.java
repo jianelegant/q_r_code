@@ -3,6 +3,8 @@ package com.yy.adam.qrcode;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
+import android.view.View;
+import android.widget.ImageView;
 
 import com.journeyapps.barcodescanner.BarcodeResult;
 import com.journeyapps.barcodescanner.CaptureManager;
@@ -12,6 +14,8 @@ public class MainActivity extends AppCompatActivity {
 
     private CaptureManager mCaptureManager;
     private DecoratedBarcodeView mDecoratedBarcodeView;
+
+    ImageView mFlashBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,12 +30,23 @@ public class MainActivity extends AppCompatActivity {
         mDecoratedBarcodeView.setTorchListener(new DecoratedBarcodeView.TorchListener() {
             @Override
             public void onTorchOn() {
-
+                mFlashBtn.setImageResource(R.drawable.flashlight_on);
             }
 
             @Override
             public void onTorchOff() {
-
+                mFlashBtn.setImageResource(R.drawable.flashlight_off);
+            }
+        });
+        mFlashBtn = findViewById(R.id.id_flashlight);
+        mFlashBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(mDecoratedBarcodeView.isTorchOn()) {
+                    mDecoratedBarcodeView.setTorchOff();
+                } else {
+                    mDecoratedBarcodeView.setTorchOn();
+                }
             }
         });
 

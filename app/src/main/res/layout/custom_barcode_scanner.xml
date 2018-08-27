@@ -18,12 +18,29 @@
         app:zxing_viewfinder_laser="@color/zxing_custom_viewfinder_laser"
         app:zxing_viewfinder_mask="@color/zxing_custom_viewfinder_mask" />
 
-    <TextView
-        android:id="@+id/zxing_status_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <LinearLayout
         android:layout_gravity="bottom|center_horizontal"
-        android:background="@color/zxing_transparent"
-        android:text="@string/zxing_msg_default_status"
-        android:textColor="@color/zxing_status_text" />
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="130dp"
+        android:orientation="vertical"
+        android:gravity="center_horizontal"
+        android:layout_marginLeft="11dp"
+        android:layout_marginRight="11dp">
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/id_flashlight"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/flashlight_off" />
+
+        <TextView
+            android:id="@+id/zxing_status_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="9dp"
+            android:background="@color/zxing_transparent"
+            android:text="@string/zxing_msg_default_status"
+            android:textColor="@color/zxing_status_text" />
+    </LinearLayout>
 </merge>

@@ -235,6 +235,10 @@ public class DecoratedBarcodeView extends FrameLayout {
         }
     }
 
+    public boolean isTorchOn() {
+        return barcodeView.isTorchOn();
+    }
+
     /**
      * Changes the settings for Camera.
      * Must be called after {@link #resume()}.
