@@ -76,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
         });
         mCaptureManager.onResume();
         if(b_IsOnResult) {
-            showInterstitialAd();
+//            showInterstitialAd();
         }
     }
 
